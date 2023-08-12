@@ -164,9 +164,7 @@ export default function Home() {
         </aside>
         <main className="ml-60 pt-16 max-h-screen overflow-auto">
           <div className="px-6 py-8">
-            <div className="card">
-              card here
-            </div>
+            
           </div>
         </main>
       </>
