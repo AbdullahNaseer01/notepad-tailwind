@@ -1,5 +1,5 @@
 import Image from 'next/image'
-
+import { GrAddCircle } from 'react-icons/gr';
 export default function Home() {
   return (
     <>
@@ -164,7 +164,11 @@ export default function Home() {
         </aside>
         <main className="ml-60 pt-16 max-h-screen overflow-auto">
           <div className="px-6 py-8">
-            
+            <div className="max-w-sm w-full p-6 bg-white rounded-lg shadow-lg flex justify-center ">
+           <button className='text-2xl py-24 '>
+            <GrAddCircle/>
+           </button>
+          </div>
           </div>
         </main>
       </>
