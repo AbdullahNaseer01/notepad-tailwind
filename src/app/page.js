@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 import { GrAddCircle } from 'react-icons/gr';
-import { app, database } from './firebaseConfig';
+import { app, database } from '../../firebase/firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
 
 export default function Home() {
