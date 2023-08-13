@@ -143,7 +143,7 @@ export default function Home() {
                 <ul className="space-y-1">
                   <li>
                     <a
-                      href="javascript:void(0)"
+                      href=""
                       className="flex items-center bg-yellow-200 rounded-xl font-bold text-sm text-yellow-900 py-3 px-4"
                     >
                       <svg
@@ -161,7 +161,7 @@ export default function Home() {
                   </li>
                   <li>
                     <a
-                      href="javascript:void(0)"
+                      href=""
                       className="flex bg-white hover:bg-yellow-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4"
                     >
                       <svg
@@ -179,7 +179,7 @@ export default function Home() {
                   </li>
                   <li>
                     <a
-                      href="javascript:void(0)"
+                      href=""
                       className="flex bg-white hover:bg-yellow-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4"
                     >
                       <svg
@@ -197,7 +197,7 @@ export default function Home() {
                   </li>
                   <li>
                     <a
-                      href="javascript:void(0)"
+                      href=""
                       className="flex bg-white hover:bg-yellow-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4"
                     >
                       <svg
