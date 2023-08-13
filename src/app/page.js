@@ -1,8 +1,13 @@
 "use client"
 import React, { useState } from 'react';
 import { GrAddCircle } from 'react-icons/gr';
+import { app, database } from './firebaseConfig';
+import { collection, addDoc } from 'firebase/firestore';
 
 export default function Home() {
+
+  const db = collection(database, 'notes');
+
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -15,14 +20,53 @@ export default function Home() {
 
   const closePopup = () => {
     setPopupOpen(false);
+    setFormData({
+      name: '',
+      email: '',
+    })
   };
 
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   // Perform form submission logic here
+  //   addDoc(dbInstance, {
+  //     noteTitle: noteTitle,
+  //     noteDesc: noteDesc
+  // })
+  //   console.log('Form submitted:', formData);
+  //   closePopup();
+  // };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const docRef = await addDoc(notesCollection, {
+  //       noteTitle: formData.name,
+  //       noteDesc: formData.email
+  //     });
+  //     console.log('Document written with ID: ', docRef.id);
+  //   } catch (error) {
+  //     console.error('Error adding document: ', error);
+  //   }
+  //   closePopup();
+  // };
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Perform form submission logic here
-    console.log('Form submitted:', formData);
-    closePopup();
-  };
+    try {
+      const docRef = await addDoc(collection(db, "notes"), {
+        noteTitle: formData.name,
+        noteDesc: formData.email
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  }
+
+
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
