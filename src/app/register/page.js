@@ -1,65 +1,118 @@
-"use client";
-import React from "react";
+'use client'
 
-const page = () => {
+import React, { useState } from "react";
+import { FcGoogle } from 'react-icons/fc';
+import { auth } from "/firebase/firebaseConfig";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+
+const Page = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    if (!username || !email || !password) {
+      alert("all fields are necessary to fill")
+    }
+    try {
+      const user = await createUserWithEmailAndPassword(auth, email, password)
+      console.log(user)
+      await updateProfile(auth.currentUser,{
+        displayName: username
+      })
+    } catch (error) {
+      console.log("error accured", error)
+    }
+  };
+
   return (
     <div className="flex items-center justify-center h-screen">
-         <div className="bg-customYellow p-8 rounded shadow-md max-w-sm w-full">
-      <h1 className="text-2xl font-semibold mb-4">Sign Up</h1>
-      <form>
-        <div className="mb-4">
-          <label
-            htmlFor="username"
-            className="block text-sm font-medium text-gray-700"
+      <div className="bg-customYellow p-8 rounded shadow-md max-w-sm w-full">
+        <h1 className="text-2xl font-semibold mb-4">Sign Up</h1>
+      
+        <form >
+          <div className="mb-4">
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              required
+              value={username}
+              onChange={handleUsernameChange}
+              className="mt-1 py-2 block w-full rounded-md drop-shadow-2xl focus:outline-none"
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              value={email}
+              onChange={handleEmailChange}
+              className="mt-1 py-2 block w-full rounded-md drop-shadow-2xl focus:outline-none"
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              value={password}
+              onChange={handlePasswordChange}
+              className="mt-1 py-2 block w-full rounded-md drop-shadow-2xl focus:outline-none"
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full py-2 px-4 bg-customDarkYellow hover:bg-moreDarkYellow focus:ring-opacity-50 drop-shadow-2xl"
+            onClick={handleSignup}
           >
-            Username
-          </label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            className="mt-1 py-2 block w-full rounded-md drop-shadow-2xl focus:outline-none"
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            className="mt-1 py-2 block w-full rounded-md drop-shadow-2xl focus:outline-none"
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            className="mt-1 py-2 block w-full rounded-md drop-shadow-2xl focus:outline-none"
-          />
-        </div>
+            Sign Up
+          </button>
+        </form>
         <button
-          type="submit"
-          className="w-full py-2 px-4 bg-customDarkYellow hover:bg-moreDarkYellow focus:ring-opacity-50 drop-shadow-2xl"
-        >
-          Sign Up
-        </button>
-      </form>
+            type="submit"
+            className="w-full mt-3 py-2 px-4 bg-white hover:bg-gray-200 focus:ring-opacity-50 drop-shadow-2xl flex justify-evenly"
+            onClick={signInWithGoogle}
+          >
+          <span className="mt-1"><FcGoogle/></span> continue with Google
+          </button>
+      </div>
     </div>
-    </div>
-   
   );
 };
 
-export default page;
+export default Page;
