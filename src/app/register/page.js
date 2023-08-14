@@ -3,7 +3,9 @@
 import React, { useState } from "react";
 import { FcGoogle } from 'react-icons/fc';
 import { auth } from "/firebase/firebaseConfig";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+
+const provider = new GoogleAuthProvider();
 
 const Page = () => {
   const [email, setEmail] = useState("");
@@ -37,7 +39,10 @@ const Page = () => {
       console.log("error accured", error)
     }
   };
-
+const signInWithGoogle = async ()=>{
+const user = await  signInWithPopup(auth , provider)
+console.log(user)
+}
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="bg-customYellow p-8 rounded shadow-md max-w-sm w-full">
