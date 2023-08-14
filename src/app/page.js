@@ -26,31 +26,6 @@ export default function Home() {
     })
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   // Perform form submission logic here
-  //   addDoc(dbInstance, {
-  //     noteTitle: noteTitle,
-  //     noteDesc: noteDesc
-  // })
-  //   console.log('Form submitted:', formData);
-  //   closePopup();
-  // };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const docRef = await addDoc(notesCollection, {
-  //       noteTitle: formData.name,
-  //       noteDesc: formData.email
-  //     });
-  //     console.log('Document written with ID: ', docRef.id);
-  //   } catch (error) {
-  //     console.error('Error adding document: ', error);
-  //   }
-  //   closePopup();
-  // };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -235,43 +210,7 @@ export default function Home() {
           </div>
         </div>
       </aside>
-      {/* <main className="ml-60 pt-16 max-h-screen overflow-auto">
-          <div className="px-6 py-8">
-            <div className="grid grid-cols-4 gap-4">
-            <div className="max-w-sm max-h-96 w-full bg-white rounded-lg shadow-lg text-center">
-           <h1 className='text-2xl'>
-            lorem
-           </h1>
-           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati fuga sit neque, nemo minus et exercitationem, hic recusandae ullam deleniti unde incidunt minima ipsam reiciendis dolores cum eaque? Harum, ea?
-           </p>
-          </div>
-
-          <div className="max-w-sm max-h-96 w-full bg-white rounded-lg shadow-lg text-center">
-           <h1 className='text-2xl'>
-            lorem
-           </h1>
-           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati fuga sit neque, nemo minus et exercitationem, hic recusandae ullam deleniti unde incidunt minima ipsam reiciendis dolores cum eaque? Harum, ea?
-           </p>
-          </div>
-
-          <div className="max-w-sm max-h-96 w-full bg-white rounded-lg shadow-lg text-center">
-           <h1 className='text-2xl'>
-            lorem
-           </h1>
-           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati fuga sit neque, nemo minus et exercitationem, hic recusandae ullam deleniti unde incidunt minima ipsam reiciendis dolores cum eaque? Harum, ea?
-           </p>
-          </div>
-            </div>
-            <div className="max-w-sm w-full  bg-white rounded-lg shadow-lg flex justify-center ">
-           <button className='text-2xl py-24 '>
-            <GrAddCircle/>
-           </button>
-          </div>
-          </div>
-        </main> */}
+  
       <main className="ml-60 pt-16 max-h-screen overflow-auto">
         <div className="px-6 py-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
