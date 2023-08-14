@@ -32,22 +32,28 @@ const Page = () => {
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password)
       console.log(user)
-      await updateProfile(auth.currentUser,{
+      await updateProfile(auth.currentUser, {
         displayName: username
       })
     } catch (error) {
       console.log("error accured", error)
     }
   };
-const signInWithGoogle = async ()=>{
-const user = await  signInWithPopup(auth , provider)
-console.log(user)
-}
+  const signInWithGoogle = async () => {
+    try {
+      const user = await signInWithPopup(auth, provider)
+      console.log(user)
+    } catch (error) {
+      console.error(" error accoured", error)
+    }
+  }
+
+
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="bg-customYellow p-8 rounded shadow-md max-w-sm w-full">
         <h1 className="text-2xl font-semibold mb-4">Sign Up</h1>
-      
+
         <form >
           <div className="mb-4">
             <label
@@ -109,12 +115,12 @@ console.log(user)
           </button>
         </form>
         <button
-            type="submit"
-            className="w-full mt-3 py-2 px-4 bg-white hover:bg-gray-200 focus:ring-opacity-50 drop-shadow-2xl flex justify-evenly"
-            onClick={signInWithGoogle}
-          >
-          <span className="mt-1"><FcGoogle/></span> continue with Google
-          </button>
+          type="submit"
+          className="w-full mt-3 py-2 px-4 bg-white hover:bg-gray-200 focus:ring-opacity-50 drop-shadow-2xl flex justify-evenly"
+          onClick={signInWithGoogle}
+        >
+          <span className="mt-1"><FcGoogle /></span> continue with Google
+        </button>
       </div>
     </div>
   );
