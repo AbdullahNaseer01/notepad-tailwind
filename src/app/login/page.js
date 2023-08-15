@@ -24,6 +24,7 @@ const Page = () => {
   // !isLoading && authUser
   if (true) {
     console.log("jump jump");
+    console.log(authUser , isLoading)
     router.push("/");
   }
 }, [authUser, isLoading]);
