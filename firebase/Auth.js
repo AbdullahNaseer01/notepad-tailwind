@@ -52,7 +52,7 @@ export default function useFirebaseAuth() {
 
 
 
-// this is the auth state here getting as the value
+// this is the auth state here getting value
 export const authUserProvider = ({ children }) => {
   const auth = useFirebaseAuth();
 
