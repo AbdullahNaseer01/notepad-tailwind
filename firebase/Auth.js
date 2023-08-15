@@ -3,6 +3,8 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { onAuthStateChanged, signOut as authSignOut } from "firebase/auth";
 import { auth } from "./firebaseConfig";
 
+
+// here we are making a context 
 const AuthUserContext = createContext({
   authUser: null,
   isLoading: true,
@@ -48,6 +50,9 @@ export default function useFirebaseAuth() {
   };
 }
 
+
+
+// this is the auth state here getting as the value
 export const authUserProvider = ({ children }) => {
   const auth = useFirebaseAuth();
 

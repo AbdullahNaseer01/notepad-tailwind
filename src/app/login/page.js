@@ -1,18 +1,29 @@
 "use client";
-import React, { useState } from "react";
-import { FcGoogle } from 'react-icons/fc';
+import React, { useEffect, useState } from "react";
+import { FcGoogle } from "react-icons/fc";
 import { auth } from "/firebase/firebaseConfig";
 import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
+import { useAuth } from "../../../firebase/Auth";
+import { useRouter } from "next/navigation";
 
 const provider = new GoogleAuthProvider();
 
 const Page = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { authUser, isLoading } = useAuth();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && authUser) {
+      router.push("/");
+    }
+  }, [authUser, isLoading]);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -43,7 +54,9 @@ const Page = () => {
     }
   };
 
-  return (
+  return isLoading || (!isLoading && authUser) ? (
+    "Loading"
+  ) : (
     <div className="flex items-center justify-center h-screen">
       <div className="bg-customYellow p-8 rounded shadow-md max-w-sm w-full">
         <h1 className="text-2xl font-semibold mb-4">Login</h1>
@@ -95,7 +108,10 @@ const Page = () => {
           className="w-full mt-3 py-2 px-4 bg-white hover:bg-gray-200 focus:ring-opacity-50 drop-shadow-2xl flex justify-evenly"
           onClick={signInWithGoogle}
         >
-          <span className="mt-1"><FcGoogle /></span> continue with Google
+          <span className="mt-1">
+            <FcGoogle />
+          </span>{" "}
+          continue with Google
         </button>
       </div>
     </div>
