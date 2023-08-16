@@ -27,7 +27,7 @@ const Page = () => {
     console.log(authUser , isLoading)
     router.push("/");
   }
-}, [authUser, isLoading]);
+},   [authUser, isLoading]);
 
 
   const handleEmailChange = (e) => {
