@@ -1,10 +1,16 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GrAddCircle } from 'react-icons/gr';
 import { app, database } from '../../firebase/firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
 
 export default function Home() {
+  const consol = () => {
+    console.log("app console");
+  };
+  useEffect(() => {
+    consol();
+  }, []);
 
   const db = collection(database, 'notes');
 
@@ -210,7 +216,7 @@ export default function Home() {
           </div>
         </div>
       </aside>
-  
+
       <main className="ml-60 pt-16 max-h-screen overflow-auto">
         <div className="px-6 py-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

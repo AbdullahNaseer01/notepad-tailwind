@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { auth } from "/firebase/firebaseConfig";
+import { auth } from "../../../firebase/firebaseConfig";
 import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
@@ -17,15 +17,19 @@ const Page = () => {
   const [password, setPassword] = useState("");
   const { authUser, isLoading } = useAuth();
 
+
   const router = useRouter();
 
   useEffect(() => {
     console.log("useEffect triggered"); // Add this line
     // !isLoading && authUser
-    if (true) {
+    if (!isLoading && authUser) {
       console.log("jump jump");
       console.log(authUser, isLoading);
       router.push("/");
+    }
+    else{
+      console.log(authUser, isLoading);
     }
   }, [authUser, isLoading]);
 
