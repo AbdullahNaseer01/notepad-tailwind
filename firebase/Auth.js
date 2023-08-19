@@ -80,7 +80,7 @@ export default function useFirebaseAuth() {
     const [authUser, setAuthUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    const clear = () => {
+    const clearUser = () => {
         setAuthUser(null);
         setIsLoading(false);
     };
@@ -94,10 +94,11 @@ export default function useFirebaseAuth() {
     const authStateChanged = async (user) => {
         setIsLoading(true);
         if (!user) {
-          console.log("if part is renning mdg from auth")
-            clear();
+          console.log("if part is renning msg from auth")
+            clearUser();
             return;
         }
+        console.log(user)
         setAuthUser({
             uid: user.uid,
             email: user.email,
@@ -107,12 +108,12 @@ export default function useFirebaseAuth() {
     };
 
     const signOut = () => {
-        authSignOut(auth).then(() => clear());
+        authSignOut(auth).then(() => clearUser());
     };
 
     useEffect(() => {
         const unSubscribe = onAuthStateChanged(auth, authStateChanged);
-        return () => unsubscribe();
+        return () => unSubscribe();
     }, []);
 
     return {
