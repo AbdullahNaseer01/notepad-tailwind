@@ -20,14 +20,10 @@ const Page = () => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("useEffect triggered"); // Add this line
-    // !isLoading && authUser
     if (!isLoading && authUser) {
       console.log("jump jump");
       console.log(authUser, isLoading);
       router.push("/");
-    } else {
-      console.log(authUser, isLoading);
     }
   }, [authUser, isLoading]);
 
@@ -59,11 +55,10 @@ const Page = () => {
       console.error(" error accoured", error);
     }
   };
-  // isLoading || (!isLoading && authUser) ? (
-  //   "Loading"
-  // ) :
 
-  return (
+  return isLoading || (!isLoading && authUser) ? (
+    "Loading"
+  ) : (
     <div className="flex items-center justify-center h-screen">
       <div className="bg-customYellow p-8 rounded shadow-md max-w-sm w-full">
         <h1 className="text-2xl font-semibold mb-4">Login</h1>
@@ -120,6 +115,7 @@ const Page = () => {
           </span>{" "}
           continue with Google
         </button>
+      <button onClick={()=>{router.push("/register")}} className="w-full mt-3 py-2 px-4 text-slate-400 hover:text-slate-500" >Dont have an account?</button>
       </div>
     </div>
   );

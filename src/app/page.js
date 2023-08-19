@@ -4,19 +4,21 @@ import { GrAddCircle } from 'react-icons/gr';
 import { app, database } from '../../firebase/firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
 import { useAuth } from "../../firebase/Auth";
+import { useRouter, useNavigate } from "next/navigation";
+
 
 export default function Home() {
-  const consol = () => {
-    console.log("app console");
-  };
-  useEffect(() => {
-    consol();
-  }, []);
+  const router = useRouter()
+  const { signOut, authUser, isLoading } = useAuth();
 
   const db = collection(database, 'notes');
-
   const [isPopupOpen, setPopupOpen] = useState(false);
-  const { signOut, authUser, isLoading } = useAuth();
+
+  useEffect(() => {
+    if (!isLoading && !authUser) {
+      router.push("/login");
+    }
+  }, [authUser, isLoading]);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -203,7 +205,7 @@ export default function Home() {
             <button
               type="button"
               className="inline-flex items-center justify-center h-9 px-4 rounded-xl bg-gray-900 text-gray-300 hover:text-white text-sm font-semibold transition"
-            onClick={signOut}
+              onClick={signOut}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

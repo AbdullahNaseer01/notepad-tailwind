@@ -1,17 +1,27 @@
 'use client'
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FcGoogle } from 'react-icons/fc';
 import { auth } from "/firebase/firebaseConfig";
 import { createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-
+import { useRouter, useNavigate } from "next/navigation";
+import { useAuth } from "../../../firebase/Auth";
 const provider = new GoogleAuthProvider();
 
+
 const Page = () => {
+  const router = useRouter();
+  const { authUser, isLoading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-
+  useEffect(() => {
+    if (!isLoading && authUser) {
+      console.log("jump jump");
+      console.log(authUser, isLoading);
+      router.push("/");
+    }
+  }, [authUser, isLoading]);
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
   };
@@ -43,13 +53,16 @@ const Page = () => {
     try {
       const user = await signInWithPopup(auth, provider)
       console.log(user)
+      router.push("/login")
     } catch (error) {
       console.error(" error accoured", error)
     }
   }
 
 
-  return (
+  return isLoading || (!isLoading && authUser) ? (
+    "Loading"
+  ) : (
     <div className="flex items-center justify-center h-screen">
       <div className="bg-customYellow p-8 rounded shadow-md max-w-sm w-full">
         <h1 className="text-2xl font-semibold mb-4">Sign Up</h1>
@@ -121,6 +134,8 @@ const Page = () => {
         >
           <span className="mt-1"><FcGoogle /></span> continue with Google
         </button>
+        <button onClick={() => { router.push("/login") }} className="w-full mt-3 py-2 px-4 text-slate-400 hover:text-slate-500" >Already have an account?</button>
+
       </div>
     </div>
   );
