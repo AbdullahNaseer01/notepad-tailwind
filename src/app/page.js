@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { GrAddCircle } from 'react-icons/gr';
 import { app, database } from '../../firebase/firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
+import { useAuth } from "../../firebase/Auth";
 
 export default function Home() {
   const consol = () => {
@@ -15,6 +16,8 @@ export default function Home() {
   const db = collection(database, 'notes');
 
   const [isPopupOpen, setPopupOpen] = useState(false);
+  const { signOut, authUser, isLoading } = useAuth();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -200,6 +203,7 @@ export default function Home() {
             <button
               type="button"
               className="inline-flex items-center justify-center h-9 px-4 rounded-xl bg-gray-900 text-gray-300 hover:text-white text-sm font-semibold transition"
+            onClick={signOut}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -211,7 +215,7 @@ export default function Home() {
               >
                 <path d="M12 1a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2a1 1 0 0 1 1-1h8zm-2 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
               </svg>
-            </button>{" "}
+            </button>
             <span className="font-bold text-sm ml-2">Logout</span>
           </div>
         </div>

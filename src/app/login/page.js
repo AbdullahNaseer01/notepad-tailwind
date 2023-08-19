@@ -17,7 +17,6 @@ const Page = () => {
   const [password, setPassword] = useState("");
   const { authUser, isLoading } = useAuth();
 
-
   const router = useRouter();
 
   useEffect(() => {
@@ -27,8 +26,7 @@ const Page = () => {
       console.log("jump jump");
       console.log(authUser, isLoading);
       router.push("/");
-    }
-    else{
+    } else {
       console.log(authUser, isLoading);
     }
   }, [authUser, isLoading]);
