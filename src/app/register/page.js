@@ -17,7 +17,6 @@ const Page = () => {
   const [username, setUsername] = useState("");
   useEffect(() => {
     if (!isLoading && authUser) {
-      console.log("jump jump");
       console.log(authUser, isLoading);
       router.push("/");
     }

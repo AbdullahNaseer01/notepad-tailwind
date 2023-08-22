@@ -38,7 +38,7 @@ const Page = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!email || !password) {
-      alert("all fields are mendatory to fill");
+      alert("all fields are mendatory to fill......");
     }
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
