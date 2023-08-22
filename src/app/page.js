@@ -1,18 +1,20 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { GrAddCircle } from 'react-icons/gr';
-import { app, database } from '../../firebase/firebaseConfig';
-import { collection, addDoc } from 'firebase/firestore';
+// import { app, database } from '../../firebase/firebaseConfig';
 import { useAuth } from "../../firebase/Auth";
 import { useRouter, useNavigate } from "next/navigation";
+import { addDoc, deleteDoc, getDoc, getDocs, collection, where, query, updateDoc, doc } from 'firebase/firestore';
+import { database } from '../../firebase/firebaseConfig';
 
 
 export default function Home() {
   const router = useRouter()
   const { signOut, authUser, isLoading } = useAuth();
 
-  const db = collection(database, 'notes');
+  // const db = collection(database, 'notes');
   const [isPopupOpen, setPopupOpen] = useState(false);
+  const [notes, setNotes] = useState([])
 
   useEffect(() => {
     if (!isLoading && !authUser) {
@@ -21,8 +23,8 @@ export default function Home() {
   }, [authUser, isLoading]);
 
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
+    title: '',
+    description: '',
   });
 
   const openPopup = () => {
@@ -41,16 +43,32 @@ export default function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const docRef = await addDoc(collection(db, "notes"), {
-        noteTitle: formData.name,
-        noteDesc: formData.email
+      const docRef = await addDoc(collection(database, "notes"), {
+        noteTitle: formData.title,
+        noteDesc: formData.description,
+        owner:authUser.uid,
+        completed:false,
       });
       console.log("Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document: ", e);
     }
   }
+const fetchNotes = async ()=>{
+ try{
+  const q = query(collection(database, "notes"), where("owner", "==", authUser.uid));
 
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    console.log(doc.id, " => ", doc.data());
+  });
+ }
+ catch{
+  console.log("error accooaffafafaf" , error)
+  console.log('11111111111111111')
+ }
+}
 
 
 
@@ -226,36 +244,7 @@ export default function Home() {
       <main className="ml-60 pt-16 max-h-screen overflow-auto">
         <div className="px-6 py-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="w-full bg-white rounded-lg shadow-lg text-center">
-              <h1 className="text-2xl">lorem</h1>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati
-                fuga sit neque, nemo minus et exercitationem, hic recusandae ullam
-                deleniti unde incidunt minima ipsam reiciendis dolores cum eaque?
-                Harum, ea?
-              </p>
-            </div>
-
-            <div className="w-full bg-white rounded-lg shadow-lg text-center">
-              <h1 className="text-2xl">lorem</h1>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati
-                fuga sit neque, nemo minus et exercitationem, hic recusandae ullam
-                deleniti unde incidunt minima ipsam reiciendis dolores cum eaque?
-                Harum, ea?
-              </p>
-            </div>
-
-            <div className="w-full bg-white rounded-lg shadow-lg text-center">
-              <h1 className="text-2xl">lorem</h1>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati
-                fuga sit neque, nemo minus et exercitationem, hic recusandae ullam
-                deleniti unde incidunt minima ipsam reiciendis dolores cum eaque?
-                Harum, ea?
-              </p>
-            </div>
-
+            
             <div className="w-full bg-white rounded-lg shadow-lg text-center">
               <button className="text-2xl py-24" onClick={openPopup}>
                 <GrAddCircle />
@@ -270,13 +259,13 @@ export default function Home() {
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <label htmlFor="name" className="block text-sm font-medium">
-                  Name
+                  Title
                 </label>
                 <input
                   type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
+                  id="title"
+                  name="title"
+                  value={formData.title}
                   onChange={handleInputChange}
                   className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
                   required
@@ -284,13 +273,13 @@ export default function Home() {
               </div>
               <div className="mb-4">
                 <label htmlFor="email" className="block text-sm font-medium">
-                  Email
+                  Description
                 </label>
                 <input
                   type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
+                  id="description"
+                  name="description"
+                  value={formData.description}
                   onChange={handleInputChange}
                   className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
                   required
