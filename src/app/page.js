@@ -20,7 +20,7 @@ export default function Home() {
     if (!isLoading && !authUser) {
       router.push("/login");
     }
-    if(authUser){
+    if (authUser) {
       fetchNotes(authUser.uid)
     }
   }, [authUser, isLoading]);
@@ -81,7 +81,7 @@ export default function Home() {
   }
 
 
-  
+
 
 
 
@@ -259,11 +259,14 @@ export default function Home() {
         <div className="px-6 py-8 ">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
-            data.map
+            {notes.length > 0 && notes.map((note, index) => (
+              <div key ={note.id} className='w-full bg-red rounded-lg shadow-lg text-center'>
+                <h1>{note.title}</h1>
+                <p>{note.description}</p>
+              </div>
+            ))}
 
-            <div className='w-full bg-white rounded-lg shadow-lg text-center'>
 
-            </div>
 
             <div className="w-full bg-white rounded-lg shadow-lg text-center">
               <button className="text-2xl py-24" onClick={openPopup}>
@@ -297,7 +300,7 @@ export default function Home() {
                   Description
                 </label>
                 <input
-                  type="email"
+                  type="text"
                   id="description"
                   name="description"
                   value={formData.description}
