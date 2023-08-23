@@ -20,7 +20,12 @@ export default function Home() {
     if (!isLoading && !authUser) {
       router.push("/login");
     }
+    if(authUser){
+      fetchNotes(authUser.uid)
+    }
   }, [authUser, isLoading]);
+
+
 
   const [formData, setFormData] = useState({
     title: '',
@@ -46,29 +51,38 @@ export default function Home() {
       const docRef = await addDoc(collection(database, "notes"), {
         noteTitle: formData.title,
         noteDesc: formData.description,
-        owner:authUser.uid,
-        completed:false,
+        owner: authUser.uid,
+        completed: false,
       });
       console.log("Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document: ", e);
     }
   }
-const fetchNotes = async ()=>{
- try{
-  const q = query(collection(database, "notes"), where("owner", "==", authUser.uid));
+  const fetchNotes = async () => {
+    try {
+      const q = query(collection(database, "notes"), where("owner", "==", authUser.uid));
 
-  const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    console.log(doc.id, " => ", doc.data());
-  });
- }
- catch{
-  console.log("error accooaffafafaf" , error)
-  console.log('11111111111111111')
- }
-}
+      const querySnapshot = await getDocs(q);
+
+      let data = []
+
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, " => ", doc.data());
+        data.push({ ...doc.data(), id: doc.id })
+      });
+      setNotes(data)
+    }
+    catch {
+      console.log("error accooaffafafaf", error)
+      console.log('11111111111111111')
+    }
+  }
+
+
+  
+
 
 
 
@@ -242,14 +256,21 @@ const fetchNotes = async ()=>{
       </aside>
 
       <main className="ml-60 pt-16 max-h-screen overflow-auto">
-        <div className="px-6 py-8">
+        <div className="px-6 py-8 ">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            
+
+            data.map
+
+            <div className='w-full bg-white rounded-lg shadow-lg text-center'>
+
+            </div>
+
             <div className="w-full bg-white rounded-lg shadow-lg text-center">
               <button className="text-2xl py-24" onClick={openPopup}>
                 <GrAddCircle />
               </button>
             </div>
+
           </div>
         </div>
 
@@ -316,93 +337,3 @@ const fetchNotes = async ()=>{
   )
 }
 
-
-
-
-// "use client"
-// import React, { useState } from 'react';
-// import { GrAddCircle } from 'react-icons/gr';
-
-// export default function Home() {
-//   const [isPopupOpen, setPopupOpen] = useState(false);
-//   const [formData, setFormData] = useState({
-//     name: '',
-//     email: '',
-//   });
-
-//   const openPopup = () => {
-//     setPopupOpen(true);
-//   };
-
-//   const closePopup = () => {
-//     setPopupOpen(false);
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     // Perform form submission logic here
-//     console.log('Form submitted:', formData);
-//     closePopup();
-//   };
-
-//   const handleInputChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData((prevData) => ({
-//       ...prevData,
-//       [name]: value,
-//     }));
-//   };
-
-//   return (
-//     <div>
-//       <header className="fixed right-0 top-0 left-60 bg-yellow-50 py-3 px-4 h-16">
-//         {/* ... Header content ... */}
-//       </header>
-//       <aside className="fixed inset-y-0 left-0 bg-white shadow-md max-h-screen w-60">
-//         {/* ... Sidebar content ... */}
-//       </aside>
-//       <main className="ml-60 pt-16 max-h-screen overflow-auto">
-//         <div className="px-6 py-8">
-//           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-//             <div className="w-full bg-white rounded-lg shadow-lg text-center">
-//               <h1 className="text-2xl">lorem</h1>
-//               <p>
-//                 {/* ... Content ... */}
-//               </p>
-//             </div>
-
-//             <div className="w-full bg-white rounded-lg shadow-lg text-center">
-//               <h1 className="text-2xl">lorem</h1>
-//               <p>
-//                 {/* ... Content ... */}
-//               </p>
-//             </div>
-
-//             <div className="w-full bg-white rounded-lg shadow-lg text-center">
-//               <h1 className="text-2xl">lorem</h1>
-//               <p>
-//                 {/* ... Content ... */}
-//               </p>
-//             </div>
-
-//             <div className="w-full bg-white rounded-lg shadow-lg text-center">
-//               <button className="text-2xl py-24" onClick={openPopup}>
-//                 <GrAddCircle />
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//         {isPopupOpen && (
-//           <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-75">
-//             <div className="bg-white p-6 rounded-lg shadow-md w-96">
-//               <h2 className="text-xl font-semibold mb-4">Popup Form</h2>
-//               <form onSubmit={handleSubmit}>
-//                 {/* ... Form content ... */}
-//               </form>
-//             </div>
-//           </div>
-//         )}
-//       </main>
-//     </div>
-//   );
-// }
