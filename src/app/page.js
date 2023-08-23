@@ -11,10 +11,14 @@ import { database } from '../../firebase/firebaseConfig';
 export default function Home() {
   const router = useRouter()
   const { signOut, authUser, isLoading } = useAuth();
-
-  // const db = collection(database, 'notes');
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [notes, setNotes] = useState([])
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+  });
+
+  // const db = collection(database, 'notes');
 
   useEffect(() => {
     if (!isLoading && !authUser) {
@@ -27,10 +31,7 @@ export default function Home() {
 
 
 
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-  });
+  
 
   const openPopup = () => {
     setPopupOpen(true);
@@ -54,6 +55,8 @@ export default function Home() {
         owner: authUser.uid,
         completed: false,
       });
+      closePopup()
+      fetchNotes(authUser.uid)
       console.log("Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -81,7 +84,9 @@ export default function Home() {
   }
 
 
-
+const theChecker = ()=>{
+  console.log(notes , " form tghe checker" )
+}
 
 
 
@@ -95,13 +100,15 @@ export default function Home() {
   };
   return (
     <>
-      <header className="fixed right-0 top-0 left-60 bg-yellow-50 py-3 px-4 h-16">
+    {/* <div className='hidden sm:inline'> */}
+    <header className="sm:fixed right-0 top-0 sm:left-60 bg-yellow-50 py-3 px-4 h-16">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between">
             <div>
               <button
                 type="button"
                 className="flex items-center focus:outline-none rounded-lg text-gray-600 hover:text-yellow-600 focus:text-yellow-600 font-semibold p-2 border border-transparent hover:border-yellow-300 focus:border-yellow-300 transition"
+              onClick={theChecker}
               >
                 <span className="inline-flex items-center justify-center w-6 h-6 text-gray-600 text-xs rounded bg-white transition mr-2">
                   <svg
@@ -148,6 +155,9 @@ export default function Home() {
           </div>
         </div>
       </header>
+    {/* </div> */}
+      
+      <div className='hidden sm:inline'>
       <aside className="fixed inset-y-0 left-0 bg-white shadow-md max-h-screen w-60">
         <div className="flex flex-col justify-between h-full">
           <div className="flex-grow">
@@ -254,86 +264,81 @@ export default function Home() {
           </div>
         </div>
       </aside>
+      </div>
+      
 
-      <main className="ml-60 pt-16 max-h-screen overflow-auto">
-        <div className="px-6 py-8 ">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-
-            {notes.length > 0 && notes.map((note, index) => (
-              <div key ={note.id} className='w-full bg-red rounded-lg shadow-lg text-center'>
-                <h1>{note.title}</h1>
-                <p>{note.description}</p>
-              </div>
-            ))}
-
-
-
-            <div className="w-full bg-white rounded-lg shadow-lg text-center">
-              <button className="text-2xl py-24" onClick={openPopup}>
-                <GrAddCircle />
-              </button>
-            </div>
-
-          </div>
+<main className=" sm:ml-60 pt-16  max-h-screen overflow-auto">
+  <div className="px-6 py-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {notes.map((note) => (
+        <div key={note.id} className="w-full bg-red rounded-lg shadow-lg text-center" style={{ minWidth: "200px", minHeight: "200px" }}>
+          <h1>{note.noteTitle}</h1>
+          <p>{note.noteDesc}</p>
         </div>
+      ))}
 
-        {isPopupOpen ? (<div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-75">
-          <div className="bg-white p-6 rounded-lg shadow-md w-96">
-            <h2 className="text-xl font-semibold mb-4">Popup Form</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label htmlFor="name" className="block text-sm font-medium">
-                  Title
-                </label>
-                <input
-                  type="text"
-                  id="title"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label htmlFor="email" className="block text-sm font-medium">
-                  Description
-                </label>
-                <input
-                  type="text"
-                  id="description"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-                  required
-                />
-              </div>
-              <div className="flex justify-end">
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-opacity-50"
-                >
-                  Submit
-                </button>
-                <button
-                  type="button"
-                  onClick={closePopup}
-                  className="ml-2 px-4 py-2 border rounded-md border-gray-300 text-gray-600 hover:text-gray-800 focus:outline-none focus:ring focus:ring-opacity-50"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
+      <div className="w-full bg-white rounded-lg shadow-lg text-center">
+        <button className="text-2xl py-24" onClick={openPopup}>
+          <GrAddCircle />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  {isPopupOpen && (
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-75">
+      <div className="bg-white p-6 rounded-lg shadow-md w-96">
+        <h2 className="text-xl font-semibold mb-4">Popup Form</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label htmlFor="title" className="block text-sm font-medium">
+              Title
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
+              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
+              required
+            />
           </div>
-        </div>) : (
-          <></>
-        )
+          <div className="mb-4">
+            <label htmlFor="description" className="block text-sm font-medium">
+              Description
+            </label>
+            <input
+              type="text"
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
+              required
+            />
+          </div>
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-opacity-50"
+            >
+              Submit
+            </button>
+            <button
+              type="button"
+              onClick={closePopup}
+              className="ml-2 px-4 py-2 border rounded-md border-gray-300 text-gray-600 hover:text-gray-800 focus:outline-none focus:ring focus:ring-opacity-50"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )}
+</main>
 
-        }
-
-
-      </main>
 
 
     </>
