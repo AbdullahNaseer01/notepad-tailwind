@@ -112,6 +112,7 @@ export default function Home() {
         await updateDoc(docRef, {
           completed: !currentCompleted, // Toggle the completed value
         });
+        fetchNotes(authUser.uid)
       } else {
         console.error("Document not found");
       }
@@ -119,7 +120,7 @@ export default function Home() {
       console.error("Error toggling completed status: ", error);
     }
   };
-  
+
 
 
   const fetchNotes = async () => {
@@ -331,7 +332,18 @@ export default function Home() {
         <div className="px-6 py-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {notes.map((note) => (
-              <div key={note.id} className="w-full relative bg-red rounded-lg shadow-lg text-center" style={{ minWidth: "200px", minHeight: "200px" }}>
+              <div
+                key={note.id}
+                className={`w-full relative rounded-lg shadow-lg text-center ${note.completed ? 'bg-lime-300' : 'bg-red'
+                  }`}
+                style={{ minWidth: "200px", minHeight: "200px" }}
+              >
+                {/* Display background text for completed notes */}
+                {note.completed && (
+                  <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs text-gray-500 bg-white bg-opacity-80 rounded p-1">
+                    Mark as Completed
+                  </span>
+                )}
                 <button className="absolute text-lg top-0 right-14 m-2" onClick={() => { handleDelete(note.id) }}>
                   <RiDeleteBinLine />
                 </button>
@@ -344,8 +356,14 @@ export default function Home() {
                 <h1 className="mt-8">{note.noteTitle}</h1>
                 <p className="mt-4">{note.noteDesc}</p>
               </div>
-
             ))}
+
+
+
+
+
+
+
 
             <div className="w-full bg-white rounded-lg shadow-lg text-center">
               <button className="text-2xl py-24" onClick={openPopup}>
