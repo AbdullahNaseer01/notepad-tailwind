@@ -1,7 +1,11 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { GrAddCircle } from 'react-icons/gr';
-import { RiMenu2Line } from 'react-icons/ri';
+import { LuEdit } from 'react-icons/lu';
+import { RiMenu2Line, RiDeleteBinLine } from 'react-icons/ri';
+
+import { TiTickOutline } from 'react-icons/ti';
+
 // import { app, database } from '../../firebase/firebaseConfig';
 import { useAuth } from "../../firebase/Auth";
 import { useRouter, useNavigate } from "next/navigation";
@@ -66,6 +70,19 @@ export default function Home() {
       console.error("Error adding document: ", e);
     }
   }
+
+  const handleDelete = async (docId) => {
+    try {
+      await deleteDoc(doc(database, "notes", docId))
+      fetchNotes(authUser.uid)
+    } catch (error) {
+      console.error("Error deleting document: ", error);
+
+    }
+
+  }
+
+
   const fetchNotes = async () => {
     try {
       const q = query(collection(database, "notes"), where("owner", "==", authUser.uid));
@@ -275,10 +292,27 @@ export default function Home() {
         <div className="px-6 py-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {notes.map((note) => (
-              <div key={note.id} className="w-full bg-red rounded-lg shadow-lg text-center" style={{ minWidth: "200px", minHeight: "200px" }}>
-                <h1>{note.noteTitle}</h1>
-                <p>{note.noteDesc}</p>
+
+              // <div key={note.id} className="w-full static bg-red rounded-lg shadow-lg text-center" style={{ minWidth: "200px", minHeight: "200px" }}>
+              // <button className='absolute ml-11 '><RiDeleteBinLine/></button>
+              //     <h1>{note.noteTitle}</h1>
+              //     <p>{note.noteDesc}</p>
+              //   </div>
+              <div key={note.id} className="w-full relative bg-red rounded-lg shadow-lg text-center" style={{ minWidth: "200px", minHeight: "200px" }}>
+                <button className="absolute text-lg top-0 right-14 m-2" onClick={()=>{handleDelete(note.id)}}>
+                  <RiDeleteBinLine />
+                </button>
+                <button>
+                  <LuEdit className="absolute text-lg top-0 right-7 m-2"/>
+                </button>
+                <button>
+                  <TiTickOutline className="absolute text-lg top-0 right-0 m-2"/>
+                </button>
+                
+                <h1 className="mt-8">{note.noteTitle}</h1>
+                <p className="mt-4">{note.noteDesc}</p>
               </div>
+
             ))}
 
             <div className="w-full bg-white rounded-lg shadow-lg text-center">
