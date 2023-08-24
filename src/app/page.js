@@ -81,6 +81,45 @@ export default function Home() {
     }
 
   }
+  // const handlemarkComplete = async (event , docId)=>{
+  //   try {
+  //     const docRef = doc(database,"notes",docId)
+  //   await updateDoc(docRef,{
+  //     completed: event.target.checked
+  //   })
+  //   } catch (error) {
+  //     console.error("Error completing document: ", error);
+  //   }
+
+  // }
+  // const handlemarkComplete = async (docId) => {
+  //   try {
+  //     const docRef = doc(database, "notes", docId);
+  //     await updateDoc(docRef, {
+  //       completed: true
+  //     });
+  //   } catch (error) {
+  //     console.error("Error completing document: ", error);
+  //   }
+  // };
+
+  const handlemarkComplete = async (docId) => {
+    try {
+      const docRef = doc(database, "notes", docId);
+      const docSnapshot = await getDoc(docRef);
+      if (docSnapshot.exists()) {
+        const currentCompleted = docSnapshot.data().completed;
+        await updateDoc(docRef, {
+          completed: !currentCompleted, // Toggle the completed value
+        });
+      } else {
+        console.error("Document not found");
+      }
+    } catch (error) {
+      console.error("Error toggling completed status: ", error);
+    }
+  };
+  
 
 
   const fetchNotes = async () => {
@@ -292,23 +331,16 @@ export default function Home() {
         <div className="px-6 py-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {notes.map((note) => (
-
-              // <div key={note.id} className="w-full static bg-red rounded-lg shadow-lg text-center" style={{ minWidth: "200px", minHeight: "200px" }}>
-              // <button className='absolute ml-11 '><RiDeleteBinLine/></button>
-              //     <h1>{note.noteTitle}</h1>
-              //     <p>{note.noteDesc}</p>
-              //   </div>
               <div key={note.id} className="w-full relative bg-red rounded-lg shadow-lg text-center" style={{ minWidth: "200px", minHeight: "200px" }}>
-                <button className="absolute text-lg top-0 right-14 m-2" onClick={()=>{handleDelete(note.id)}}>
+                <button className="absolute text-lg top-0 right-14 m-2" onClick={() => { handleDelete(note.id) }}>
                   <RiDeleteBinLine />
                 </button>
                 <button>
-                  <LuEdit className="absolute text-lg top-0 right-7 m-2"/>
+                  <LuEdit className="absolute text-lg top-0 right-7 m-2" />
                 </button>
-                <button>
-                  <TiTickOutline className="absolute text-lg top-0 right-0 m-2"/>
+                <button onClick={() => handlemarkComplete(note.id)}>
+                  <TiTickOutline className="absolute text-lg top-0 right-0 m-2" />
                 </button>
-                
                 <h1 className="mt-8">{note.noteTitle}</h1>
                 <p className="mt-4">{note.noteDesc}</p>
               </div>
