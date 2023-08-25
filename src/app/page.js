@@ -18,6 +18,9 @@ export default function Home() {
   const { signOut, authUser, isLoading } = useAuth();
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [isMenuToggle, setMenuToggle] = useState(false);
+  const [isEditMode, setEditMode] = useState(false);
+  const [editNoteId, setEditNoteId] = useState(null);
+
   const [notes, setNotes] = useState([])
   const [formData, setFormData] = useState({
     title: '',
@@ -36,7 +39,17 @@ export default function Home() {
   }, [authUser, isLoading]);
 
 
-
+  useEffect(() => {
+    if (isEditMode && editNoteId) {
+      const editNote = notes.find(note => note.id === editNoteId);
+      if (editNote) {
+        setFormData({
+          title: editNote.noteTitle,
+          description: editNote.noteDesc,
+        });
+      }
+    }
+  }, [isEditMode, editNoteId, notes]);
 
 
   const openPopup = () => {
@@ -54,22 +67,51 @@ export default function Home() {
     setMenuToggle(!isMenuToggle)
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const docRef = await addDoc(collection(database, "notes"), {
+  //       noteTitle: formData.title,
+  //       noteDesc: formData.description,
+  //       owner: authUser.uid,
+  //       completed: false,
+  //     });
+  //     closePopup()
+  //     fetchNotes(authUser.uid)
+  //     console.log("Document written with ID: ", docRef.id);
+  //   } catch (e) {
+  //     console.error("Error adding document: ", e);
+  //   }
+  // }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const docRef = await addDoc(collection(database, "notes"), {
-        noteTitle: formData.title,
-        noteDesc: formData.description,
-        owner: authUser.uid,
-        completed: false,
-      });
-      closePopup()
-      fetchNotes(authUser.uid)
-      console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-      console.error("Error adding document: ", e);
+      if (isEditMode && editNoteId) {
+        // Edit mode: Update the existing note
+        const docRef = doc(database, "notes", editNoteId);
+        await updateDoc(docRef, {
+          noteTitle: formData.title,
+          noteDesc: formData.description,
+        });
+      } else {
+        // Add mode: Add a new note
+        const docRef = await addDoc(collection(database, "notes"), {
+          noteTitle: formData.title,
+          noteDesc: formData.description,
+          owner: authUser.uid,
+          completed: false,
+        });
+      }
+
+      closePopup();
+      fetchNotes(authUser.uid);
+      console.log("Note updated or added successfully");
+    } catch (error) {
+      console.error("Error updating or adding note: ", error);
     }
-  }
+  };
+
 
   const handleDelete = async (docId) => {
     try {
@@ -110,7 +152,7 @@ export default function Home() {
       if (docSnapshot.exists()) {
         const currentCompleted = docSnapshot.data().completed;
         await updateDoc(docRef, {
-          completed: !currentCompleted, // Toggle the completed value
+          completed: !currentCompleted,
         });
         fetchNotes(authUser.uid)
       } else {
@@ -348,7 +390,11 @@ export default function Home() {
                   <RiDeleteBinLine />
                 </button>
                 <button>
-                  <LuEdit className="absolute text-lg top-0 right-7 m-2" />
+                  <LuEdit className="absolute text-lg top-0 right-7 m-2" onClick={() => {
+                    setEditMode(true);
+                    setEditNoteId(note.id);
+                    setPopupOpen(true);
+                  }} />
                 </button>
                 <button onClick={() => handlemarkComplete(note.id)}>
                   <TiTickOutline className="absolute text-lg top-0 right-0 m-2" />
@@ -357,14 +403,6 @@ export default function Home() {
                 <p className="mt-4">{note.noteDesc}</p>
               </div>
             ))}
-
-
-
-
-
-
-
-
             <div className="w-full bg-white rounded-lg shadow-lg text-center">
               <button className="text-2xl py-24" onClick={openPopup}>
                 <GrAddCircle />
@@ -372,11 +410,12 @@ export default function Home() {
             </div>
           </div>
         </div>
-
         {isPopupOpen && (
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-75">
             <div className="bg-white p-6 rounded-lg shadow-md w-96">
-              <h2 className="text-xl font-semibold mb-4">Popup Form</h2>
+              <h2 className="text-xl font-semibold mb-4">
+                {isEditMode ? 'Edit Note' : 'Add Note'}
+              </h2>
               <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                   <label htmlFor="title" className="block text-sm font-medium">
@@ -411,7 +450,7 @@ export default function Home() {
                     type="submit"
                     className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-opacity-50"
                   >
-                    Submit
+                    {isEditMode ? 'Save' : 'Submit'}
                   </button>
                   <button
                     type="button"
@@ -428,8 +467,7 @@ export default function Home() {
       </main>
 
 
-
     </>
-  )
+  );
 }
 
