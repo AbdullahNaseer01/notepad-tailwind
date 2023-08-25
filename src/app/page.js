@@ -10,6 +10,7 @@ import { addDoc, deleteDoc, getDoc, getDocs, collection, where, query, updateDoc
 import { database } from '../../firebase/firebaseConfig';
 import Navbar from './components/Navbar';
 import AsideMenu from './components/AsideMenu';
+import Note from './components/Note';
 
 export default function Home() {
   const router = useRouter();
@@ -58,6 +59,7 @@ export default function Home() {
       title: '',
       description: '',
     });
+    setEditMode(false)
   };
 
   const toggleMenu = () => {
@@ -73,6 +75,7 @@ export default function Home() {
           noteTitle: formData.title,
           noteDesc: formData.description,
           date: formData.date,
+          color: formData.color
         });
         setEditMode(false);
       } else {
@@ -134,7 +137,6 @@ export default function Home() {
       console.log("Error fetching notes: ", error);
     }
   };
-
   const handleInputChange = (e) => {
     const { name, value, type } = e.target;
 
@@ -153,39 +155,12 @@ export default function Home() {
     <>
       <Navbar toggleMenu={toggleMenu} />
       <AsideMenu isMenuToggle={isMenuToggle} signOut={signOut} />
-
       <main className=" sm:ml-60 pt-16  max-h-screen overflow-auto">
         <div className="px-6 py-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {notes.map((note) => (
-              <div
-                key={note.id}
-                className={`w-full relative rounded-lg shadow-lg text-center ${note.completed ? 'bg-lime-300' : 'bg-red'
-                  }`}
-                style={{ minWidth: "200px", minHeight: "200px", backgroundColor: note.color }}
-              >
-                {/* Display background text for completed notes */}
-                {note.completed && (
-                  <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs text-gray-500 bg-white bg-opacity-80 rounded p-1">
-                    Mark as Completed
-                  </span>
-                )}
-                <button className="absolute text-lg top-0 right-14 m-2" onClick={() => { handleDelete(note.id) }}>
-                  <RiDeleteBinLine />
-                </button>
-                <button>
-                  <LuEdit className="absolute text-lg top-0 right-7 m-2" onClick={() => {
-                    setEditMode(true);
-                    setEditNoteId(note.id);
-                    setPopupOpen(true);
-                  }} />
-                </button>
-                <button onClick={() => handlemarkComplete(note.id)}>
-                  <TiTickOutline className="absolute text-lg top-0 right-0 m-2" />
-                </button>
-                <h1 className="mt-8">{note.noteTitle}</h1>
-                <p className="mt-4">{note.noteDesc}</p>
-              </div>
+              <Note setEditMode={setEditMode} setEditNoteId={setEditNoteId} setPopupOpen={setPopupOpen} note={note} handleDelete={handleDelete} handlemarkComplete={handlemarkComplete} />
+              
             ))}
             <div className="w-full bg-white rounded-lg shadow-lg text-center">
               <button className="text-2xl py-24" onClick={openPopup}>
@@ -254,6 +229,7 @@ export default function Home() {
                   onChange={handleInputChange}
                   className="mt-1 block"
                 />
+
                 <div className="flex justify-end">
                   <button
                     type="submit"
@@ -269,6 +245,7 @@ export default function Home() {
                     Cancel
                   </button>
                 </div>
+
               </form>
             </div>
           </div>
