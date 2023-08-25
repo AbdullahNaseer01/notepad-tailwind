@@ -11,6 +11,8 @@ import { database } from '../../firebase/firebaseConfig';
 import Navbar from './components/Navbar';
 import AsideMenu from './components/AsideMenu';
 import Note from './components/Note';
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
 export default function Home() {
   const router = useRouter();
@@ -36,7 +38,6 @@ export default function Home() {
       fetchNotes(authUser.uid);
     }
   }, [authUser, isLoading]);
-
   useEffect(() => {
     if (isEditMode && editNoteId) {
       const editNote = notes.find(note => note.id === editNoteId);
@@ -44,10 +45,13 @@ export default function Home() {
         setFormData({
           title: editNote.noteTitle,
           description: editNote.noteDesc,
+          date: new Date(editNote.date), // Convert ISO date string to Date object
+          color: editNote.color, // Set color directly as the color string
         });
       }
     }
   }, [isEditMode, editNoteId, notes]);
+  
 
   const openPopup = () => {
     setPopupOpen(true);
@@ -78,6 +82,7 @@ export default function Home() {
           color: formData.color
         });
         setEditMode(false);
+        toast.success("Note updated sucessfully")
       } else {
 
         const docRef = await addDoc(collection(database, "notes"), {
@@ -88,12 +93,15 @@ export default function Home() {
           date: formData.date,
           color: formData.color,
         });
+        toast.success("Note added sucessfully")
+
       }
       closePopup();
       fetchNotes(authUser.uid);
       console.log("Note updated or added successfully");
     } catch (error) {
       console.error("Error updating or adding note: ", error);
+      toast.error("Some Issue Occured Try Again")
     }
   };
 
@@ -101,8 +109,10 @@ export default function Home() {
     try {
       await deleteDoc(doc(database, "notes", docId));
       fetchNotes(authUser.uid);
+      toast.success("Note deleted sucessfully")
     } catch (error) {
       console.error("Error deleting document: ", error);
+      toast.error("some issue while deleting Note")
     }
   };
 
@@ -154,6 +164,7 @@ export default function Home() {
   return (
     <>
       <Navbar toggleMenu={toggleMenu} />
+      <ToastContainer position="top-center" />
       <AsideMenu isMenuToggle={isMenuToggle} signOut={signOut} />
       <main className=" sm:ml-60 pt-16  max-h-screen overflow-auto">
         <div className="px-6 py-8">
