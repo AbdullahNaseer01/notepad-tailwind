@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
         {/* Add your head elements here */}
       </head>
       <body className={inter.className}>
-        <AuthUserProvider>{children}</AuthUserProvider> {/* Use JSX properly */}
+        <AuthUserProvider>{children}</AuthUserProvider> 
       </body>
     </html>
   );
