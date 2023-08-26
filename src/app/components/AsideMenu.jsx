@@ -1,9 +1,16 @@
 "use client"
 import Link from 'next/link'
 import React from 'react'
+import { useRouter, usePathname } from 'next/navigation';
+
 
 
 const AsideMenu = ({ isMenuToggle, signOut }) => {
+  const router = useRouter();
+  const pathname = usePathname()
+  const checker = () => {
+    console.log(router.pathname)
+  }
   return (
     <div className={` sm:inline ${isMenuToggle ? 'block' : 'hidden'}`}>
       <aside className="fixed inset-y-0 left-0 bg-white shadow-md max-h-screen w-60">
@@ -19,7 +26,7 @@ const AsideMenu = ({ isMenuToggle, signOut }) => {
                 <li>
                   <Link
                     href="/"
-                    className="flex items-center bg-yellow-200 rounded-xl font-bold text-sm text-yellow-900 py-3 px-4"
+                    className={`flex items-center ${pathname === "/" ? "bg-yellow-200 rounded-xl font-bold text-sm text-yellow-900 py-3 px-4" : " bg-white hover:bg-yellow-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4"}`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -37,7 +44,8 @@ const AsideMenu = ({ isMenuToggle, signOut }) => {
                 <li>
                   <Link
                     href="/upcoming"
-                    className="flex bg-white hover:bg-yellow-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4"
+                    className={`flex items-center ${pathname === '/upcoming' ? "bg-yellow-200 rounded-xl font-bold text-sm text-yellow-900 py-3 px-4" : " bg-white hover:bg-yellow-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4"}`}
+
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -55,6 +63,7 @@ const AsideMenu = ({ isMenuToggle, signOut }) => {
                 <li>
                   <a
                     href=""
+                    onClick={checker}
                     className="flex bg-white hover:bg-yellow-50 rounded-xl font-bold text-sm text-gray-900 py-3 px-4"
                   >
                     <svg
