@@ -1,9 +1,10 @@
+"use client"
 import React from 'react'
 
-const page = () => {
+const Page = () => {
   return (
     <div>calandar page under construction  </div>
   )
 }
 
-export default page
+export default Page
