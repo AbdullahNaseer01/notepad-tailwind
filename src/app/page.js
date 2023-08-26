@@ -44,19 +44,6 @@ export default function Home() {
     }
   }, [authUser, isLoading]);
 
-  // useEffect(() => {
-  //   if (isEditMode && editNoteId) {
-  //     const editNote = notes.find(note => note.id === editNoteId);
-  //     if (editNote) {
-  //       setFormData({
-  //         title: editNote.noteTitle,
-  //         description: editNote.noteDesc,
-  //         date: new Date(editNote.date), // Convert ISO date string to Date object
-  //         color: editNote.color, // Set color directly as the color string
-  //       });
-  //     }
-  //   }
-  // }, [isEditMode, editNoteId, notes]);
   useEffect(() => {
     if (isEditMode && editNoteId) {
       const editNote = notes.today.find(note => note.id === editNoteId);
