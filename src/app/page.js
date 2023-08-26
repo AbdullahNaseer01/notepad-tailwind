@@ -21,7 +21,11 @@ export default function Home() {
   const [isMenuToggle, setMenuToggle] = useState(false);
   const [isEditMode, setEditMode] = useState(false);
   const [editNoteId, setEditNoteId] = useState(null);
-  const [notes, setNotes] = useState([]);
+  // const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState({
+    today: [],
+    future: []
+  });  
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -134,19 +138,66 @@ export default function Home() {
     }
   };
 
+  // const fetchNotes = async () => {
+  //   try {
+  //     const q = query(collection(database, "notes"), where("owner", "==", authUser.uid));
+  //     const querySnapshot = await getDocs(q);
+  //     let data = [];
+  //     querySnapshot.forEach((doc) => {
+  //       data.push({ ...doc.data(), id: doc.id });
+  //     });
+  //     setNotes(data);
+  //   } catch (error) {
+  //     console.log("Error fetching notes: ", error);
+  //   }
+  // };
+
   const fetchNotes = async () => {
     try {
-      const q = query(collection(database, "notes"), where("owner", "==", authUser.uid));
-      const querySnapshot = await getDocs(q);
-      let data = [];
-      querySnapshot.forEach((doc) => {
-        data.push({ ...doc.data(), id: doc.id });
+      const today = new Date().toISOString().split("T")[0];
+  
+      // Query notes with today's date or earlier
+      const todayQuery = query(
+        collection(database, "notes"),
+        where("owner", "==", authUser.uid),
+        where("date", "<=", today)
+      );
+  
+      // Query notes with future dates
+      const futureQuery = query(
+        collection(database, "notes"),
+        where("owner", "==", authUser.uid),
+        where("date", ">", today)
+      );
+  
+      const [todaySnapshot, futureSnapshot] = await Promise.all([
+        getDocs(todayQuery),
+        getDocs(futureQuery)
+      ]);
+  
+      let todayNotes = [];
+      let futureNotes = [];
+  
+      todaySnapshot.forEach((doc) => {
+        todayNotes.push({ ...doc.data(), id: doc.id });
       });
-      setNotes(data);
+  
+      futureSnapshot.forEach((doc) => {
+        futureNotes.push({ ...doc.data(), id: doc.id });
+      });
+  
+      setNotes({
+        today: todayNotes,
+        future: futureNotes
+      });
     } catch (error) {
       console.log("Error fetching notes: ", error);
     }
   };
+  
+
+
+
   const handleInputChange = (e) => {
     const { name, value, type } = e.target;
 
@@ -169,7 +220,7 @@ export default function Home() {
       <main className=" sm:ml-60 pt-16  max-h-screen overflow-auto">
         <div className="px-6 py-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {notes.map((note) => (
+            {notes.today.map((note) => (
               <Note key={note.id} setEditMode={setEditMode} setEditNoteId={setEditNoteId} setPopupOpen={setPopupOpen} note={note} handleDelete={handleDelete} handlemarkComplete={handlemarkComplete} />
 
             ))}
