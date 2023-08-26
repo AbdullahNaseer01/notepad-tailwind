@@ -12,7 +12,7 @@ import Navbar from './components/Navbar';
 import AsideMenu from './components/AsideMenu';
 import Note from './components/Note';
 import { ToastContainer, toast } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Home() {
   const router = useRouter();
@@ -51,7 +51,7 @@ export default function Home() {
       }
     }
   }, [isEditMode, editNoteId, notes]);
-  
+
 
   const openPopup = () => {
     setPopupOpen(true);
@@ -170,8 +170,8 @@ export default function Home() {
         <div className="px-6 py-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {notes.map((note) => (
-              <Note setEditMode={setEditMode} setEditNoteId={setEditNoteId} setPopupOpen={setPopupOpen} note={note} handleDelete={handleDelete} handlemarkComplete={handlemarkComplete} />
-              
+              <Note key={note.id} setEditMode={setEditMode} setEditNoteId={setEditNoteId} setPopupOpen={setPopupOpen} note={note} handleDelete={handleDelete} handlemarkComplete={handlemarkComplete} />
+
             ))}
             <div className="w-full bg-white rounded-lg shadow-lg text-center">
               <button className="text-2xl py-24" onClick={openPopup}>
