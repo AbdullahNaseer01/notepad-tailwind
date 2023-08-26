@@ -205,8 +205,9 @@ export default function Home() {
                   <label htmlFor="description" className="block text-sm font-medium">
                     Description
                   </label>
-                  <input
+                  <textarea
                     type="text"
+                    rows="4" cols="50"
                     id="description"
                     name="description"
                     value={formData.description}
