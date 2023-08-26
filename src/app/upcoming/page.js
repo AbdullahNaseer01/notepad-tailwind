@@ -15,7 +15,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PopupForm from '../components/PopupForm';
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
   const { signOut, authUser, isLoading } = useAuth();
   const [isPopupOpen, setPopupOpen] = useState(false);
@@ -233,7 +233,7 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
 
   
 
