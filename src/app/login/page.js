@@ -9,6 +9,8 @@ import {
 } from "firebase/auth";
 import { useAuth } from "../../../firebase/Auth";
 import { useRouter, useNavigate } from "next/navigation";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const provider = new GoogleAuthProvider();
 
@@ -44,7 +46,11 @@ const Page = () => {
       const user = await signInWithEmailAndPassword(auth, email, password);
       console.log("login submitted:", user);
     } catch (error) {
-      console.error("error accoured", error);
+      if ((error = "auth/wrong-password")) {
+        toast.error("wrong password or email");
+      } else {
+        console.error("error accoured", error);
+      }
     }
   };
   const signInWithGoogle = async () => {
@@ -115,7 +121,14 @@ const Page = () => {
           </span>{" "}
           continue with Google
         </button>
-      <button onClick={()=>{router.push("/register")}} className="w-full mt-3 py-2 px-4 text-slate-400 hover:text-slate-500" >Dont have an account?</button>
+        <button
+          onClick={() => {
+            router.push("/register");
+          }}
+          className="w-full mt-3 py-2 px-4 text-slate-400 hover:text-slate-500"
+        >
+          Dont have an account?
+        </button>
       </div>
     </div>
   );

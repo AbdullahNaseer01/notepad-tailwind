@@ -2,6 +2,8 @@ import React from 'react'; // Import React
 import './globals.css';
 import { Inter } from 'next/font/google';
 import { AuthUserProvider } from '../../firebase/Auth'; // Correct import name
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -17,6 +19,7 @@ export default function RootLayout({ children }) {
         {/* Add your head elements here */}
       </head>
       <body className={inter.className}>
+      <ToastContainer position="top-center" />
         <AuthUserProvider>{children}</AuthUserProvider> 
       </body>
     </html>

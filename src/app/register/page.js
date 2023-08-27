@@ -1,13 +1,19 @@
-'use client'
+"use client";
 
 import React, { useState, useEffect } from "react";
-import { FcGoogle } from 'react-icons/fc';
+import { FcGoogle } from "react-icons/fc";
 import { auth } from "/firebase/firebaseConfig";
-import { createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 import { useRouter, useNavigate } from "next/navigation";
 import { useAuth } from "../../../firebase/Auth";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const provider = new GoogleAuthProvider();
-
 
 const Page = () => {
   const router = useRouter();
@@ -36,28 +42,34 @@ const Page = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
     if (!username || !email || !password) {
-      alert("all fields are necessary to fill")
+      alert("all fields are necessary to fill");
     }
     try {
-      const user = await createUserWithEmailAndPassword(auth, email, password)
-      console.log(user)
+      const user = await createUserWithEmailAndPassword(auth, email, password);
+      console.log(user);
       await updateProfile(auth.currentUser, {
-        displayName: username
-      })
+        displayName: username,
+      });
     } catch (error) {
-      console.log("error accured", error)
+      if ((error = "auth/email-already-in-use")) {
+        toast.error("email already exist use a different one");
+        console.error("error accured", error);
+      } else {
+        console.error("error accured", error);
+      }
     }
   };
+
+
   const signInWithGoogle = async () => {
     try {
-      const user = await signInWithPopup(auth, provider)
-      console.log(user)
-      router.push("/login")
+      const user = await signInWithPopup(auth, provider);
+      console.log(user);
+      router.push("/login");
     } catch (error) {
-      console.error(" error accoured", error)
+      console.error(" error accoured", error);
     }
-  }
-
+  };
 
   return isLoading || (!isLoading && authUser) ? (
     "Loading"
@@ -66,7 +78,7 @@ const Page = () => {
       <div className="bg-customYellow p-8 rounded shadow-md max-w-sm w-full">
         <h1 className="text-2xl font-semibold mb-4">Sign Up</h1>
 
-        <form >
+        <form>
           <div className="mb-4">
             <label
               htmlFor="username"
@@ -131,10 +143,19 @@ const Page = () => {
           className="w-full mt-3 py-2 px-4 bg-white hover:bg-gray-200 focus:ring-opacity-50 drop-shadow-2xl flex justify-evenly"
           onClick={signInWithGoogle}
         >
-          <span className="mt-1"><FcGoogle /></span> continue with Google
+          <span className="mt-1">
+            <FcGoogle />
+          </span>{" "}
+          continue with Google
         </button>
-        <button onClick={() => { router.push("/login") }} className="w-full mt-3 py-2 px-4 text-slate-400 hover:text-slate-500" >Already have an account?</button>
-
+        <button
+          onClick={() => {
+            router.push("/login");
+          }}
+          className="w-full mt-3 py-2 px-4 text-slate-400 hover:text-slate-500"
+        >
+          Already have an account?
+        </button>
       </div>
     </div>
   );

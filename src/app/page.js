@@ -11,8 +11,8 @@ import { database } from '../../firebase/firebaseConfig';
 import Navbar from './components/Navbar';
 import AsideMenu from './components/AsideMenu';
 import Note from './components/Note';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// import { ToastContainer, toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 import PopupForm from './components/PopupForm';
 
 export default function Home() {
@@ -231,7 +231,7 @@ export default function Home() {
   return (
     <>
       <Navbar toggleMenu={toggleMenu} />
-      <ToastContainer position="top-center" />
+      {/* <ToastContainer position="top-center" /> */}
       <AsideMenu isMenuToggle={isMenuToggle} signOut={signOut} />
       <main className=" sm:ml-60 pt-16  max-h-screen overflow-auto">
         <div className="px-6 py-8">
