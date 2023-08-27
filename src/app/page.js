@@ -11,8 +11,8 @@ import { database } from '../../firebase/firebaseConfig';
 import Navbar from './components/Navbar';
 import AsideMenu from './components/AsideMenu';
 import Note from './components/Note';
-// import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import PopupForm from './components/PopupForm';
 
 export default function Home() {
