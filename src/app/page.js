@@ -104,7 +104,6 @@ export default function Home() {
         setEditMode(false);
         toast.success("Note updated sucessfully")
       } else {
-
         const docRef = await addDoc(collection(database, "notes"), {
           noteTitle: formData.title,
           noteDesc: formData.description,
